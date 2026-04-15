@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Suy Tưởng — Marcus Aurelius</title>
+<style>
+/* ===========================================================
+   FONT & BIẾN MÀU
+   Font stack tối ưu cho tiếng Việt (không dùng lib ngoài)
+   =========================================================== */
+:root{
+  --bg:#f6f1e9;--bg2:#ece6da;--bg3:#e0d8ca;
+  --tx:#2e2a22;--tx2:#5e5546;--tx3:#8a8070;
+  --ac:#4a5568;--ac2:#2d3748;
+  --gd:#7a6540;--gd2:#96793e;--gdBg:rgba(122,101,64,.07);
+  --cd:#ffffff;--cd2:#faf6f0;
+  --bd:#d6ccb8;--bd2:#c5b99e;
+  --sh:0 1px 8px rgba(46,42,34,.06);
+  --sh2:0 3px 16px rgba(46,42,34,.1);
+  --r:12px;--tr:all .3s ease;
+  --ok:#3d8b40;--er:#b04040;
+  /* Font tiếng Việt đẹp, rõ ràng */
+  --f1:'Palatino Linotype','Book Antiqua','Palatino','Times New Roman',serif;
+  --f2:-apple-system,'Segoe UI','Helvetica Neue','Arial',sans-serif;
+}
+[data-theme="dark"]{
+  --bg:#111118;--bg2:#191924;--bg3:#22223a;
+  --tx:#e8e0d0;--tx2:#b0a690;--tx3:#706858;
+  --ac:#7b90b8;--ac2:#a0b4d8;
+  --gd:#d4b060;--gd2:#e0c070;--gdBg:rgba(212,176,96,.08);
+  --cd:#18182a;--cd2:#20203a;
+  --bd:#2a2a44;--bd2:#383860;
+  --sh:0 1px 8px rgba(0,0,0,.3);
+  --sh2:0 3px 16px rgba(0,0,0,.4);
+  --ok:#70c074;--er:#e87070;
+}
+
+/* --- RESET --- */
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--f2);
+  background:var(--bg);color:var(--tx);
+  line-height:1.8;transition:var(--tr);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  letter-spacing:.01em;
+}
+h1,h2,h3{font-family:var(--f1);font-weight:700;line-height:1.4;letter-spacing:.02em}
+h2{font-size:1.2rem}h3{font-size:1.05rem}
+p,li,label,textarea{font-size:.93rem}
+button{font-family:var(--f2);cursor:pointer;border:none;transition:var(--tr);font-size:.88rem;letter-spacing:.01em}
+
+/* --- HEADER --- */
+.hd{background:var(--cd);border-bottom:1px solid var(--bd);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
+.hd-t{font-family:var(--f1);font-size:1.1rem;color:var(--gd);display:flex;align-items:center;gap:8px;font-weight:700}
+.tb{background:var(--bg2);color:var(--tx2);padding:5px 14px;border-radius:20px;font-size:.8rem}
+.tb:hover{background:var(--bg3)}
+
+/* --- NAV --- */
+.nv{display:flex;overflow-x:auto;gap:2px;padding:6px 8px;background:var(--cd);border-bottom:1px solid var(--bd);scrollbar-width:none}
+.nv::-webkit-scrollbar{display:none}
+.nb{padding:7px 14px;border-radius:20px;background:transparent;color:var(--tx3);white-space:nowrap;font-size:.8rem;font-weight:500}
+.nb:hover{background:var(--bg2);color:var(--tx2)}
+.nb.on{background:var(--ac);color:#fff}
+
+/* --- LAYOUT --- */
+.wr{max-width:900px;margin:0 auto;padding:30px 20px 90px}
+.pg{display:none;animation:fi .3s ease}.pg.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* --- CARD --- */
+.cd-box{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:var(--sh);transition:var(--tr)}
+.cd-box:hover{box-shadow:var(--sh2)}
+
+/* --- SHARED COMPONENTS --- */
+.qt{border-left:3px solid var(--gd);padding:10px 14px;margin:10px 0;background:var(--gdBg);border-radius:0 8px 8px 0;font-family:var(--f1);font-style:italic;color:var(--tx2);font-size:.9rem;line-height:1.7}
+.qt em{font-style:normal;display:block;text-align:right;font-size:.8rem;color:var(--gd);margin-top:4px;font-family:var(--f2)}
+.btn{padding:9px 18px;border-radius:8px;font-weight:600}
+.bp{background:var(--ac);color:#fff}.bp:hover{background:var(--ac2)}
+.bo{background:transparent;border:1.5px solid var(--bd);color:var(--tx2)}.bo:hover{border-color:var(--gd);color:var(--gd)}
+.bs{padding:6px 14px;font-size:.82rem}
+.stit{font-family:var(--f1);color:var(--gd);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--bd);font-size:1.15rem;display:flex;align-items:center;gap:8px}
+.pbar{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin:6px 0}
+.pfill{height:100%;background:var(--gd);border-radius:3px;transition:width .5s ease}
+.badge{display:inline-flex;align-items:center;gap:4px;background:var(--gdBg);border:1px solid var(--bd);color:var(--gd);padding:2px 10px;border-radius:16px;font-size:.72rem;font-weight:600;font-family:var(--f2)}
+.sub{font-size:.84rem;color:var(--tx2);margin-bottom:14px;line-height:1.6}
+
+/* --- HOME --- */
+.hero{text-align:center;padding:32px 0 20px}
+.hero h1{font-size:1.55rem;color:var(--gd);margin-bottom:6px}
+.hero p{color:var(--tx2);font-size:.9rem;max-width:460px;margin:0 auto;line-height:1.7}
+.hero-i{font-size:2.6rem;margin-bottom:10px}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-top:20px}
+.fs{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:12px 6px;text-align:center;cursor:pointer;transition:var(--tr)}
+.fs:hover{border-color:var(--gd);transform:translateY(-2px)}
+.fs .ic{font-size:1.3rem;margin-bottom:4px}
+.fs .lb{font-size:.7rem;color:var(--tx2);line-height:1.3}
+
+/* --- PRINCIPLES --- */
+.pn{width:30px;height:30px;border-radius:50%;background:var(--gd);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;font-family:var(--f2);flex-shrink:0}
+.ph{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.rq{background:var(--bg2);padding:10px 14px;border-radius:8px;margin-top:10px;font-size:.88rem;color:var(--tx2);line-height:1.6}
+.ex-box{font-size:.86rem;color:var(--tx2);margin-bottom:8px;padding:8px 12px;background:var(--cd2);border-radius:8px;border-left:2px solid var(--bd2)}
+
+/* --- ACTIONS --- */
+.ai{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.ai:last-child{border-bottom:none}
+.acb{width:20px;height:20px;accent-color:var(--gd);margin-top:2px;cursor:pointer;flex-shrink:0}
+.at{font-size:.9rem;line-height:1.6}
+.acat{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.acat-t{font-size:.78rem;color:var(--gd);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.act-link{font-size:.76rem;color:var(--tx3);cursor:pointer;text-decoration:underline;margin-left:auto}
+.act-link:hover{color:var(--gd)}
+
+/* --- QUIZ --- */
+.qo{display:block;width:100%;text-align:left;padding:12px 14px;margin:5px 0;border-radius:8px;background:var(--cd2);border:1.5px solid var(--bd);color:var(--tx);font-size:.9rem;line-height:1.5}
+.qo:hover:not(.ok):not(.no){border-color:var(--gd)}
+.qo.ok{border-color:var(--ok);background:rgba(61,139,64,.07);color:var(--ok)}
+.qo.no{border-color:var(--er);background:rgba(176,64,64,.05);color:var(--er)}
+.qex{margin-top:10px;padding:10px 12px;background:var(--gdBg);border-radius:8px;font-size:.86rem;color:var(--tx2);border-left:3px solid var(--gd);line-height:1.6}
+.qcn{text-align:center;color:var(--tx3);font-size:.82rem;margin-bottom:10px}
+
+/* --- FLASHCARDS --- */
+.fcc{perspective:1000px;margin:18px 0}
+.fc{width:100%;min-height:220px;position:relative;cursor:pointer;transition:transform .6s;transform-style:preserve-3d}
+.fc.fl{transform:rotateY(180deg)}
+.fcf,.fcb{position:absolute;width:100%;min-height:220px;backface-visibility:hidden;border-radius:var(--r);padding:24px 20px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;border:1px solid var(--bd)}
+.fcf{background:var(--cd)}
+.fcb{background:var(--ac);color:#fff;transform:rotateY(180deg)}
+.fcl{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;opacity:.6}
+.fct{font-size:.92rem;line-height:1.7}
+.fcnv{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.fccn{text-align:center;color:var(--tx3);font-size:.82rem;margin-top:6px}
+
+/* --- MISTAKES --- */
+.cor{background:var(--bg2);padding:10px 14px;border-radius:8px;margin-top:8px;font-size:.88rem;line-height:1.7}
+
+/* --- JOURNAL --- */
+.jin{width:100%;min-height:100px;padding:12px;border:1.5px solid var(--bd);border-radius:var(--r);background:var(--cd);color:var(--tx);font-family:var(--f2);font-size:.92rem;resize:vertical;line-height:1.7}
+.jin:focus{outline:none;border-color:var(--gd)}
+.jd{font-size:.76rem;color:var(--tx3);margin-bottom:3px}
+.jt{font-size:.9rem;white-space:pre-wrap;line-height:1.7}
+.jx{background:none;color:var(--er);font-size:.76rem;padding:2px 6px;opacity:.35}.jx:hover{opacity:1}
+
+/* --- DASHBOARD --- */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.sc{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:16px;text-align:center}
+.sn{font-size:1.6rem;color:var(--gd);font-weight:800;font-family:var(--f1)}
+.sl{font-size:.76rem;color:var(--tx3);margin-top:4px}
+.dp-row{display:flex;justify-content:space-between;align-items:center;font-size:.86rem;margin-bottom:4px}
+.dp-name{display:flex;align-items:center;gap:6px;color:var(--tx)}
+.dp-cnt{color:var(--gd);font-weight:700;font-family:var(--f2);font-size:.84rem}
+.dp-item{margin-bottom:12px}
+.qh-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bd);font-size:.86rem}
+
+/* --- RESPONSIVE --- */
+@media(max-width:480px){
+  .hero h1{font-size:1.3rem}
+  .fg{grid-template-columns:repeat(3,1fr)}
+  .wr{padding:14px 10px 80px}
+  .fcf,.fcb{min-height:200px;padding:18px 14px}
+  .sg{grid-template-columns:repeat(2,1fr)}
+  p,li,label,textarea{font-size:.9rem}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hd">
+  <div class="hd-t">🏛️ Suy Tưởng</div>
+  <button class="tb" onclick="toggleTheme()" id="tB">☀️</button>
+</header>
+
+<!-- NAV — 9 tabs theo UX flow -->
+<nav class="nv">
+  <button class="nb on" data-p="home">Trang chủ</button>
+  <button class="nb" data-p="msg">Thông điệp</button>
+  <button class="nb" data-p="ref">Phản hồi</button>
+  <button class="nb" data-p="act">Hành động</button>
+  <button class="nb" data-p="quiz">Kiểm tra</button>
+  <button class="nb" data-p="fc">Thẻ học</button>
+  <button class="nb" data-p="err">Sai lầm</button>
+  <button class="nb" data-p="jnl">Nhật ký</button>
+  <button class="nb" data-p="dash">Tiến độ</button>
+</nav>
+
+<div class="wr">
+
+<!-- ===== TRANG CHỦ ===== -->
+<div class="pg on" id="p-home">
+  <div class="hero">
+    <div class="hero-i">🏛️</div>
+    <h1>Triết Học Khắc Kỷ</h1>
+    <p>Học từ Marcus Aurelius — vị hoàng đế triết gia La Mã — cách sống bình an, đức hạnh và tự do nội tâm qua cuốn <em>Suy Tưởng</em>.</p>
+    <div class="fg">
+      <div class="fs" onclick="go('msg')"><div class="ic">📜</div><div class="lb">Thông điệp</div></div>
+      <div class="fs" onclick="go('ref')"><div class="ic">💭</div><div class="lb">Phản hồi</div></div>
+      <div class="fs" onclick="go('act')"><div class="ic">⚡</div><div class="lb">Hành động</div></div>
+      <div class="fs" onclick="go('quiz')"><div class="ic">✍️</div><div class="lb">Kiểm tra</div></div>
+      <div class="fs" onclick="go('fc')"><div class="ic">🃏</div><div class="lb">Thẻ học</div></div>
+      <div class="fs" onclick="go('err')"><div class="ic">⚠️</div><div class="lb">Sai lầm</div></div>
+      <div class="fs" onclick="go('jnl')"><div class="ic">📓</div><div class="lb">Nhật ký</div></div>
+      <div class="fs" onclick="go('dash')"><div class="ic">📊</div><div class="lb">Tiến độ</div></div>
+    </div>
+  </div>
+  <div class="qt">"Hạnh phúc của đời anh phụ thuộc vào chất lượng những suy nghĩ của anh."<em>— Marcus Aurelius, Suy Tưởng 5.16</em></div>
+  <div class="cd-box" style="margin-top:14px">
+    <h3 style="color:var(--gd);margin-bottom:8px">Về cuốn sách</h3>
+    <p><em>Suy Tưởng</em> (Meditations) là tập ghi chép cá nhân của Marcus Aurelius — hoàng đế La Mã trị vì gần hai thập niên (161–180 CN). Được viết trong thập niên 170 giữa chiến tranh và mất mát, đây không phải triết học để dạy ai — mà là bài tập tâm linh ông viết cho chính mình.</p>
+  </div>
+  <div class="cd-box">
+    <h3 style="color:var(--gd);margin-bottom:8px">Luồng học tập</h3>
+    <p style="color:var(--tx2);font-size:.86rem;line-height:1.8">
+      <strong>Bước 1:</strong> Đọc <strong>6 nguyên tắc</strong> cốt lõi tại mục <em>Thông điệp</em><br>
+      <strong>Bước 2:</strong> Suy ngẫm sâu qua mục <em>Phản hồi</em><br>
+      <strong>Bước 3:</strong> Thực hành <strong>24 hành động</strong> (4 hành động/nguyên tắc) tại mục <em>Hành động</em><br>
+      <strong>Bước 4:</strong> Kiểm tra kiến thức với <strong>12 câu hỏi</strong><br>
+      <strong>Bước 5:</strong> Luyện tập qua <strong>10 thẻ tình huống</strong><br>
+      <strong>Bước 6:</strong> Tránh <strong>6 sai lầm</strong> phổ biến<br>
+      <strong>Bước 7:</strong> Viết <em>Nhật ký</em> suy ngẫm hàng ngày<br>
+      <strong>Bước 8:</strong> Theo dõi <em>Tiến độ</em> toàn diện
+    </p>
+  </div>
+</div>
+
+<!-- ===== THÔNG ĐIỆP CỐT LÕI ===== -->
+<div class="pg" id="p-msg"><h2 class="stit">📜 Thông điệp cốt lõi Khắc Kỷ</h2><p class="sub">6 nguyên tắc nền tảng — mỗi nguyên tắc gắn với 4 hành động thực tiễn tại mục <span style="color:var(--gd);cursor:pointer;text-decoration:underline" onclick="go('act')">Hành động</span>.</p><div id="eM"></div></div>
+
+<!-- ===== PHẢN HỒI ===== -->
+<div class="pg" id="p-ref"><h2 class="stit">💭 Phản hồi &amp; Suy ngẫm</h2><p class="sub">Chọn một nguyên tắc, đọc câu hỏi và viết suy ngẫm. Bài viết được lưu vào Nhật ký.</p><div id="eR"></div></div>
+
+<!-- ===== HÀNH ĐỘNG ===== -->
+<div class="pg" id="p-act"><h2 class="stit">⚡ Chuyển đổi Hành động</h2><p class="sub">24 hành động cụ thể — 4 hành động cho mỗi nguyên tắc. Đánh dấu khi hoàn thành, tiến độ lưu tự động và hiển thị tại <span style="color:var(--gd);cursor:pointer;text-decoration:underline" onclick="go('dash')">Tiến độ</span>.</p><div class="pbar"><div class="pfill" id="ap" style="width:0"></div></div><p style="font-size:.78rem;color:var(--tx3);margin-bottom:14px" id="apc">0% hoàn thành</p><div id="eA"></div></div>
+
+<!-- ===== BÀI KIỂM TRA ===== -->
+<div class="pg" id="p-quiz"><h2 class="stit">✍️ Bài kiểm tra</h2><div id="eQ"></div></div>
+
+<!-- ===== THẺ HỌC ===== -->
+<div class="pg" id="p-fc">
+  <h2 class="stit">🃏 Thẻ học — Nhấn để lật</h2>
+  <p class="sub">Mặt trước: tình huống thực tế. Mặt sau: nguyên tắc Khắc Kỷ áp dụng.</p>
+  <div class="fcc"><div class="fc" id="fcC" onclick="fcFlip()"><div class="fcf"><div class="fcl">Tình huống</div><div class="fct" id="fcQ"></div></div><div class="fcb"><div class="fcl">Nguyên tắc Khắc Kỷ</div><div class="fct" id="fcA"></div></div></div></div>
+  <div class="fcnv"><button class="btn bo bs" onclick="fcP()">← Trước</button><button class="btn bp bs" onclick="fcN()">Tiếp →</button></div>
+  <div class="fccn" id="fcCn"></div>
+</div>
+
+<!-- ===== SAI LẦM ===== -->
+<div class="pg" id="p-err"><h2 class="stit">⚠️ Sai lầm thường gặp</h2><p class="sub">6 hiểu sai phổ biến về Triết học Khắc Kỷ — và sự thật đằng sau.</p><div id="eE"></div></div>
+
+<!-- ===== NHẬT KÝ ===== -->
+<div class="pg" id="p-jnl">
+  <h2 class="stit">📓 Nhật ký Suy ngẫm</h2>
+  <div class="cd-box">
+    <p style="font-size:.86rem;color:var(--tx2);margin-bottom:8px">Viết suy ngẫm hàng ngày — như Marcus đã viết cho chính mình.</p>
+    <textarea class="jin" id="jI" placeholder="Hôm nay tôi đã học được gì? Nguyên tắc nào tôi áp dụng? Tôi có thể cải thiện điều gì?"></textarea>
+    <div style="margin-top:8px"><button class="btn bp bs" onclick="jSv()">Lưu suy ngẫm</button></div>
+  </div>
+  <div id="eJ"></div>
+</div>
+
+<!-- ===== TIẾN ĐỘ ===== -->
+<div class="pg" id="p-dash">
+  <h2 class="stit">📊 Bảng điều khiển Tiến độ</h2>
+  <div class="sg" id="eSt"></div>
+  <div class="cd-box">
+    <h3 style="color:var(--gd);margin-bottom:10px">Tiến độ Hành động theo Nguyên tắc</h3>
+    <p style="font-size:.82rem;color:var(--tx3);margin-bottom:12px">Mỗi nguyên tắc có 4 hành động. Hoàn thành tại mục <span style="color:var(--gd);cursor:pointer;text-decoration:underline" onclick="go('act')">Hành động</span>.</p>
+    <div id="ePp"></div>
+  </div>
+  <div class="cd-box" style="margin-top:14px">
+    <h3 style="color:var(--gd);margin-bottom:10px">Lịch sử Bài kiểm tra</h3>
+    <div id="eQh"></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ===========================================================
+   DỮ LIỆU — DATA LAYER
+   =========================================================== */
+
+/* 6 Nguyên tắc Khắc Kỷ — mỗi nguyên tắc gồm:
+   id, icon, title, description, example, quote, reflection question,
+   và 4 hành động thực tiễn (habits) */
+const P=[
+{id:1,ic:'⚖️',t:'Sự phân đôi của Kiểm soát',
+ d:'Chỉ tập trung vào những gì thuộc quyền kiểm soát — suy nghĩ, hành động, phản ứng — và buông bỏ những gì nằm ngoài: ý kiến người khác, thời tiết, quá khứ.',
+ ex:'Khi bị kẹt xe, thay vì tức giận (không kiểm soát được), hãy dùng thời gian đó để suy ngẫm hoặc nghe sách nói.',
+ qt:'"Trở ngại đối với hành động thúc đẩy hành động nhanh lên. Những gì đứng trên đường trở thành con đường."',qs:'— Suy Tưởng 5.20',
+ rq:'Hôm nay có điều gì bạn đang lo lắng mà thực ra nằm ngoài tầm kiểm soát?',
+ h:['Sáng: liệt kê 3 điều TRONG và 3 điều NGOÀI tầm kiểm soát','Khi gặp khó khăn, dừng lại hỏi: "Mình kiểm soát được gì ở đây?"','Buông bỏ 1 lo lắng cụ thể về điều không thể thay đổi','Viết nhật ký 5 phút về phản ứng của mình trong ngày']},
+{id:2,ic:'🏆',t:'Đức hạnh là Điều tốt đẹp nhất',
+ d:'Bốn đức hạnh cốt lõi — Trí tuệ, Can đảm, Công lý, Tiết chế — là điều tốt đẹp duy nhất. Tiền bạc, danh vọng chỉ là thứ trung tính.',
+ ex:'Khi đứng trước cám dỗ gian lận để thành công, nhớ rằng tính chính trực mới là tài sản quý nhất — không ai lấy đi được.',
+ qt:'"Không bao giờ coi một sự vật là có lợi cho anh nếu nó khiến anh phản bội sự thật, hoặc mất cảm giác xấu hổ."',qs:'— Suy Tưởng 3.7',
+ rq:'Trong tuần qua, có lúc nào bạn hy sinh đức hạnh để đổi lấy tiện nghi?',
+ h:['Thực hành 1 hành động trung thực dù nhỏ (Trí tuệ)','Làm 1 việc tốt mà không cần ai biết (Công lý)','Đối mặt 1 nỗi sợ nhỏ hôm nay (Can đảm)','Từ chối 1 cám dỗ không lành mạnh (Tiết chế)']},
+{id:3,ic:'🍂',t:'Vô thường và Chấp nhận',
+ d:'Mọi thứ đều thay đổi, trôi qua, biến mất. Hiểu điều này giúp trân trọng hiện tại, không bám víu, chấp nhận mất mát bình thản.',
+ ex:'Khi mất công việc hay mối quan hệ, nhớ đó là quy luật tự nhiên — như quả ôliu chín rồi rụng, biết ơn cây đã nuôi nó.',
+ qt:'"Thời gian là dòng sông, là dòng chảy mãnh liệt của các sự kiện; ta nhác thấy nó một lần thì nó đã trôi tuột."',qs:'— Suy Tưởng 4.43',
+ rq:'Bạn đang bám víu vào điều gì mà biết rằng nó nhất định sẽ thay đổi?',
+ h:['Nhắc nhở bản thân: khoảnh khắc này sẽ qua','Trân trọng 1 người thân bằng lời nói hoặc hành động cụ thể','Chấp nhận 1 thay đổi bất ngờ mà không phản kháng','Viết ra 3 điều biết ơn hôm nay']},
+{id:4,ic:'🌿',t:'Sống hòa hợp với Tự nhiên',
+ d:'Sống đúng bản chất con người — sinh vật có lý trí và xã hội. Làm tròn vai trò, phục vụ lợi ích chung, hợp tác với người khác.',
+ ex:'Khi ra quyết định, hãy hỏi: hành động này có mang lại lợi ích cho cộng đồng xung quanh không?',
+ qt:'"Chúng tôi được sinh ra để làm việc với nhau như tay, chân, mắt, như hai hàm răng. Phá rối nhau là phi tự nhiên."',qs:'— Suy Tưởng 2.1',
+ rq:'Hôm nay bạn có thể phục vụ ai hoặc đóng góp điều gì cho cộng đồng?',
+ h:['Giúp đỡ 1 người mà không mong đáp trả','Hành động vì lợi ích chung, không vì cá nhân','Lắng nghe ai đó thật sự, không phán xét','Tha thứ cho 1 lỗi lầm của người khác']},
+{id:5,ic:'🔥',t:'Tự kỷ luật và Bình an nội tâm',
+ d:'Bình an đến từ bên trong. Kiểm soát phản ứng, cảm xúc, ham muốn — con đường đến tự do thật sự. Trí tuệ là pháo đài bất khả xâm phạm.',
+ ex:'Khi tức giận vì lời ai đó, dừng 10 giây và nhắc: "Không ai có thể tổn thương tôi nếu tôi không cho phép."',
+ qt:'"Anh luôn có thể bứt ra bất cứ lúc nào. Bằng cách hướng vào bên trong anh."',qs:'— Suy Tưởng 4.3',
+ rq:'Cảm xúc nào đang kiểm soát bạn nhiều nhất gần đây?',
+ h:['Dậy sớm 15 phút, thiền hoặc hít thở sâu 5 phút','Kiềm chế phản ứng tức giận ít nhất 1 lần','Hoàn thành 1 việc khó mà hay trì hoãn','Hạn chế mạng xã hội xuống dưới 2 giờ']},
+{id:6,ic:'🧘',t:'Chánh niệm và Tự phản tỉnh',
+ d:'Thường xuyên tự vấn, quan sát suy nghĩ khách quan. Sống trọn hiện tại — không mê loạn bởi quá khứ hay tương lai.',
+ ex:'Mỗi tối tự hỏi: "Hôm nay mình làm gì đúng? Sai ở đâu? Ngày mai cải thiện gì?"',
+ qt:'"Đừng sống như kiểu trước mắt anh còn vô số năm. Cái chết đã phủ bóng lên anh. Trong khi còn sống — hãy sống cho tốt."',qs:'— Suy Tưởng 4.17',
+ rq:'Nếu hôm nay là ngày cuối cùng, bạn có hài lòng với cách mình đã sống không?',
+ h:['Sáng: đọc 1 nguyên tắc Khắc Kỷ và suy ngẫm 3 phút','Chiều: tự vấn "Mình đã sống đúng bản chất chưa?"','Tối: ghi ra 1 bài học cụ thể từ ngày hôm nay','Ăn chậm, chánh niệm ít nhất 1 bữa trong ngày']}
+];
+
+/* 12 câu Quiz */
+const QZ=[
+{q:'Theo Khắc Kỷ, "sự phân đôi kiểm soát" nghĩa là gì?',o:['Chia đời thành vui và buồn','Phân biệt những gì ta kiểm soát được và không','Kiểm soát cả người khác lẫn bản thân','Chia thời gian thành việc và nghỉ'],c:1,e:'Tập trung vào suy nghĩ/hành động (kiểm soát được), buông bỏ bên ngoài (không kiểm soát được) — nền tảng bình an nội tâm. [Nguyên tắc 1]'},
+{q:'Bốn đức hạnh cốt lõi của Khắc Kỷ là gì?',o:['Giàu có, Danh vọng, Quyền lực, Sức khỏe','Trí tuệ, Can đảm, Công lý, Tiết chế','Từ bi, Hỷ, Xả, Buông bỏ','Trung thành, Dũng cảm, Khiêm tốn, Kiên nhẫn'],c:1,e:'Sophia, Andreia, Dikaiosyne, Sophrosyne — bốn đức hạnh duy nhất thật sự tốt đẹp. [Nguyên tắc 2]'},
+{q:'Marcus Aurelius viết Suy Tưởng cho ai?',o:['Con trai Commodus','Viện Nguyên lão','Chính bản thân ông','Triết gia đương thời'],c:2,e:'Đây là ghi chép cá nhân, bài tập tâm linh rèn luyện tâm trí — không phải để xuất bản.'},
+{q:'Khi gặp người khiến tức giận, Marcus khuyên gì?',o:['Trả thù cho họ sợ','Tránh xa mãi mãi','Nhớ rằng họ không biết phân biệt tốt xấu','Phớt lờ hoàn toàn'],c:2,e:'"Bọn họ như thế bởi không biết cái gì tốt xấu" (2.1). Sự xấu xa là do ngu dốt, không phải ác ý. [Nguyên tắc 4]'},
+{q:'Logos trong Khắc Kỷ có nghĩa gì?',o:['Logo thương hiệu','Nguyên lý lý trí chi phối vũ trụ','Một vị thần cụ thể','Luật pháp La Mã'],c:1,e:'Logos = sức mạnh lý trí tràn ngập vũ trụ. Trong cá nhân = khả năng suy lý. Trong vũ trụ = Tự nhiên. [Nền tảng triết học]'},
+{q:'Marcus so sánh thời gian với hình ảnh nào?',o:['Ngọn núi bất động','Dòng sông chảy xiết','Khu vườn yên bình','Cuốn sách dài'],c:1,e:'"Thời gian là dòng sông, dòng chảy mãnh liệt" (4.43). [Nguyên tắc 3 — Vô thường]'},
+{q:'Cách đối phó nỗi sợ chết theo Marcus?',o:['Thuốc trường sinh','Nhận ra chết là quá trình tự nhiên','Không bao giờ nghĩ đến','Cầu nguyện thần linh'],c:1,e:'"Đừng khinh thường cái chết, mà hãy chào đón nó" (9.3). [Nguyên tắc 3 — Chấp nhận]'},
+{q:'"Cách trả thù tốt nhất là đừng làm giống nó" (6.6) — nguyên tắc nào?',o:['Vô thường','Tự kỷ luật & đức hạnh','Hòa hợp tự nhiên','Phân đôi kiểm soát'],c:1,e:'Giữ đức hạnh thay vì đáp trả cái ác. [Nguyên tắc 2 + 5]'},
+{q:'Ba kỷ luật trung tâm của Suy Tưởng (Pierre Hadot)?',o:['Đọc, Viết, Thiền','Nhận thức, Hành động, Ý chí','Ăn, Tập, Ngủ','Cầu nguyện, Làm việc, Phụng sự'],c:1,e:'Nhận thức (nhìn khách quan), Hành động (phục vụ cộng đồng), Ý chí (chấp nhận ngoài kiểm soát).'},
+{q:'Epictetus — ảnh hưởng nhất đến Marcus — từng là gì?',o:['Hoàng đế','Nô lệ','Tướng quân','Thương nhân'],c:1,e:'Thực hành Khắc Kỷ khi còn là nô lệ — chứng minh tự do nội tâm không phụ thuộc hoàn cảnh.'},
+{q:'"Sáng ra nếu khó dậy khỏi giường..." thuộc Quyển nào?',o:['Quyển 1','Quyển 3','Quyển 5','Quyển 8'],c:2,e:'Suy Tưởng 5.1 — nhắc nhở về bổn phận và bản chất con người. [Nguyên tắc 4 + 5]'},
+{q:'Khi ai đó xúc phạm bạn, điều gì thật sự gây hại?',o:['Lời nói của họ','Hành động của họ','Nhận thức của bạn về sự việc','Hoàn cảnh bên ngoài'],c:2,e:'"Chọn không bị hại, thì không cảm thấy bị hại" (4.7–4.8). Chính nhận thức quyết định. [Nguyên tắc 1]'}
+];
+
+/* 10 Flashcards */
+const FC=[
+{q:'Bạn bị đồng nghiệp chỉ trích bất công trước mặt sếp.',a:'[Nguyên tắc 1 — Phân đôi Kiểm soát]\nKhông kiểm soát được lời họ, nhưng kiểm soát được phản ứng. Giữ bình tĩnh, đáp bằng sự thật và phẩm giá. "Chọn không bị hại, thì không cảm thấy bị hại" (4.7).'},
+{q:'Bạn mất công việc gắn bó nhiều năm. Cảm giác sụp đổ.',a:'[Nguyên tắc 3 — Vô thường]\nMọi thứ đều tạm thời. "Giống như ôliu, chín rồi rụng. Ca ngợi mẹ nó, biết ơn cái cây đã sinh ra nó" (4.48). Trân trọng quá khứ, mở lòng cho tương lai.'},
+{q:'Ai đó phản bội lòng tin của bạn. Bạn rất tức giận và thất vọng.',a:'[Nguyên tắc 2 — Đức hạnh Công lý]\n"Cảm thương người cả khi lầm lẫn chỉ duy có ở con người" (7.22). Họ hành động vì không phân biệt tốt xấu. Giữ phẩm giá — đó mới là sức mạnh.'},
+{q:'Sáng sớm, bạn không muốn dậy khỏi giường, chỉ muốn nằm.',a:'[Nguyên tắc 4 — Bản chất con người]\n"Ta phải đi làm việc, như một con người. Có gì phải phàn nàn?" (5.1). Ngay kiến, ong cũng làm nhiệm vụ — bạn sinh ra để đóng góp.'},
+{q:'Bạn sợ hãi trước sự thay đổi lớn sắp tới trong cuộc đời.',a:'[Nguyên tắc 3 — Chấp nhận]\n"Sợ thay đổi ư? Có cái gì tồn tại mà không thay đổi?" (7.18). Thay đổi là bản chất vũ trụ. Chào đón nó như mùa xuân chào đón mầm mới.'},
+{q:'Bạn bị ám ảnh bởi danh tiếng và sự công nhận trên mạng.',a:'[Nguyên tắc 3 — Vô thường]\n"Danh tiếng vĩnh cửu là gì? Là sự trống rỗng" (4.33). Tiếng vỗ tay sẽ tắt, nhưng tính cách còn mãi. Tập trung sống đúng đắn.'},
+{q:'Bạn cảm thấy cuộc đời bất công. Tại sao mình phải chịu khổ?',a:'[Nguyên tắc 1+5 — Ý chí]\n"Thật bất hạnh? Không — may mắn vì ta không bị tổn hại bởi nó" (4.49). Chướng ngại không ngăn được đức hạnh. Biến trở ngại thành chất đốt.'},
+{q:'Bạn lo lắng về tương lai không biết trước, mất ngủ vì suy nghĩ.',a:'[Nguyên tắc 6 — Chánh niệm]\n"Đừng để trí tưởng tượng bị toàn bộ cuộc đời giày vò. Dán mắt vào cảnh ngộ trước mắt" (8.36). Chỉ hiện tại là thật — sống trọn nó.'},
+{q:'Bạn ghen tị với thành công rực rỡ của người khác.',a:'[Nguyên tắc 2+5 — Đức hạnh]\n"Tham vọng là buộc hạnh phúc vào những gì người khác nói. Tỉnh táo là buộc vào chính hành động" (5.51). So sánh với chính mình hôm qua.'},
+{q:'Công việc quá tải, stress nặng, muốn bỏ cuộc tất cả.',a:'[Nguyên tắc 5+6 — Tự kỷ luật]\n"Đừng nghĩ triết học như ông thầy, mà như miếng bọt biển chữa viêm mắt — thứ thuốc mỡ êm dịu" (5.9). Từng bước một. Không hoàn hảo cũng được.'}
+];
+
+/* 6 Sai lầm phổ biến */
+const MK=[
+{w:'Khắc Kỷ = kìm nén cảm xúc, trở thành người lạnh lùng vô cảm.',r:'Khắc Kỷ không phủ nhận cảm xúc — mà dạy không để cảm xúc kiểm soát hành động. Marcus bộc lộ buồn, lo trong Suy Tưởng — nhưng rèn luyện phản ứng đúng đắn, không bị cuốn đi.'},
+{w:'Khắc Kỷ = chấp nhận mọi thứ thụ động, cam chịu số phận.',r:'Ngược lại! "Trở ngại thúc đẩy hành động" (5.20). Chấp nhận ≠ buông xuôi. Chấp nhận điều không kiểm soát được ĐỂ tập trung năng lượng vào điều LÀM ĐƯỢC.'},
+{w:'Khắc Kỷ = triết học bi quan, chỉ nói về cái chết và đau khổ.',r:'Nhắc về cái chết là để SỐNG TRỌN VẸN HƠN. "Phần thưởng duy nhất ở đời là tính cách không hoen ố" (6.30). Marcus tìm ý nghĩa trong đức hạnh và phụng sự.'},
+{w:'Khắc Kỷ chỉ dành cho người gặp hoàn cảnh khó khăn.',r:'Marcus = hoàng đế quyền lực nhất thế giới. Epictetus = nô lệ. Cả hai đều cần Khắc Kỷ. Triết học này áp dụng cho MỌI hoàn cảnh, MỌI tầng lớp.'},
+{w:'Khắc Kỷ = tu thân ích kỷ, không quan tâm người khác.',r:'"Chúng tôi sinh ra để làm việc với nhau" (2.1). Công lý là 1 trong 4 đức hạnh cốt lõi. Marcus lặp lại: con người là sinh vật XÃ HỘI, sống VÌ NHAU.'},
+{w:'Theo Khắc Kỷ, giàu có là xấu, phải sống khổ hạnh.',r:'Giàu có = "thứ trung tính" (indifferent) — không tốt không xấu tự thân. Antoninus sống giàu nhưng không kiêu. Vấn đề là khi đặt GIÁ TRỊ BẢN THÂN vào đó thay vì đức hạnh.'}
+];
+
+/* ===========================================================
+   QUẢN LÝ TRẠNG THÁI — STATE (localStorage)
+   =========================================================== */
+const SK='stoic_v3';
+function G(){try{return JSON.parse(localStorage.getItem(SK))||{}}catch(e){return{}}}
+function S(k,v){const s=G();s[k]=v;try{localStorage.setItem(SK,JSON.stringify(s))}catch(e){}}
+function gA(){return G().a||{}}
+function sA(id,v){const a=gA();a[id]=v;S('a',a)}
+function gJ(){return G().j||[]}
+function sJ(j){S('j',j)}
+function gQH(){return G().qh||[]}
+function aQH(sc){const h=gQH();h.push({d:new Date().toLocaleDateString('vi-VN'),s:sc,t:QZ.length});S('qh',h)}
+
+/* ===========================================================
+   RENDER — HÀM HIỂN THỊ
+   =========================================================== */
+
+/* --- Thông điệp --- */
+function rM(){
+  document.getElementById('eM').innerHTML=P.map(p=>`
+  <div class="cd-box">
+    <div class="ph"><span class="pn">${p.id}</span><div><h3 style="color:var(--gd)">${p.ic} ${p.t}</h3><span class="badge">4 hành động</span></div></div>
+    <p style="margin-bottom:8px">${p.d}</p>
+    <div class="ex-box"><strong>Ví dụ:</strong> ${p.ex}</div>
+    <div class="qt">${p.qt}<em>${p.qs}</em></div>
+    <div class="rq">💭 <strong>Suy ngẫm:</strong> ${p.rq}</div>
+    <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn bo bs" onclick="go('act')">Xem 4 hành động →</button>
+      <button class="btn bo bs" onclick="rIdx=${p.id-1};go('ref')">Viết phản hồi →</button>
+    </div>
+  </div>`).join('');
+}
+
+/* --- Phản hồi --- */
+let rIdx=0;
+function rR(){
+  const el=document.getElementById('eR');const p=P[rIdx];
+  el.innerHTML=`
+  <div style="display:flex;justify-content:center;gap:4px;margin-bottom:14px;flex-wrap:wrap">
+    ${P.map((_,i)=>`<button class="btn bs ${i===rIdx?'bp':'bo'}" onclick="rIdx=${i};rR()" style="min-width:34px">${i+1}</button>`).join('')}
+  </div>
+  <div class="cd-box" style="text-align:center;margin-bottom:12px">
+    <div style="font-size:.78rem;color:var(--tx3)">Nguyên tắc ${rIdx+1} / ${P.length}</div>
+    <h3 style="margin:6px 0;color:var(--gd)">${p.ic} ${p.t}</h3>
+    <p style="font-size:.88rem;color:var(--tx2)">${p.d}</p>
+  </div>
+  <div class="cd-box">
+    <div class="qt">${p.qt}<em>${p.qs}</em></div>
+    <p style="margin:14px 0;font-weight:700;color:var(--gd);font-size:.95rem">💭 ${p.rq}</p>
+    <textarea class="jin" id="rI" rows="4" placeholder="Viết suy ngẫm của bạn..."></textarea>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn bp bs" onclick="svR()">Lưu vào Nhật ký</button>
+      <button class="btn bo bs" onclick="rIdx=(rIdx+1)%P.length;rR()">Nguyên tắc tiếp →</button>
+    </div>
+  </div>`;
+}
+function svR(){
+  const t=document.getElementById('rI').value.trim();if(!t)return;
+  const j=gJ();j.unshift({id:Date.now(),d:new Date().toLocaleString('vi-VN'),t:'[Phản hồi — '+P[rIdx].t+'] '+t});
+  sJ(j);document.getElementById('rI').value='';alert('Đã lưu vào Nhật ký!');
+}
+
+/* --- Hành động — liên kết rõ ràng với nguyên tắc --- */
+function rA(){
+  const el=document.getElementById('eA');const a=gA();
+  el.innerHTML=P.map(p=>{
+    let dn=0;p.h.forEach((_,i)=>{if(a['a'+p.id+'_'+i])dn++});
+    return `<div class="cd-box">
+      <div class="acat">
+        <span class="pn" style="width:26px;height:26px;font-size:.72rem">${p.id}</span>
+        <span class="acat-t">${p.ic} ${p.t}</span>
+        <span class="badge" style="margin-left:auto">${dn}/${p.h.length}</span>
+      </div>
+      ${p.h.map((h,i)=>{
+        const id='a'+p.id+'_'+i;
+        return `<div class="ai"><input type="checkbox" class="acb" id="${id}" ${a[id]?'checked':''} onchange="tA('${id}',this.checked)"><label class="at" for="${id}">${h}</label></div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+  uAP();
+}
+function tA(id,v){sA(id,v);uAP();
+  // Cập nhật badge count
+  const pId=parseInt(id.replace('a','').split('_')[0]);
+  const a=gA();let dn=0;
+  P[pId-1].h.forEach((_,i)=>{if(a['a'+pId+'_'+i])dn++});
+}
+function uAP(){
+  const a=gA();let t=0,d=0;P.forEach(p=>{t+=p.h.length;p.h.forEach((_,i)=>{if(a['a'+p.id+'_'+i])d++})});
+  const pct=t?Math.round(d/t*100):0;
+  document.getElementById('ap').style.width=pct+'%';
+  document.getElementById('apc').textContent=pct+'% hoàn thành ('+d+'/'+t+')';
+  rA(); // re-render to update badges
+}
+// Override to prevent infinite loop
+function tA(id,v){sA(id,v);
+  const a=gA();let t=0,d=0;P.forEach(p=>{t+=p.h.length;p.h.forEach((_,i)=>{if(a['a'+p.id+'_'+i])d++})});
+  const pct=t?Math.round(d/t*100):0;
+  document.getElementById('ap').style.width=pct+'%';
+  document.getElementById('apc').textContent=pct+'% hoàn thành ('+d+'/'+t+')';
+  // Update badge only
+  const pId=parseInt(id.replace('a','').split('_')[0]);
+  let dn=0;P[pId-1].h.forEach((_,i)=>{if(a['a'+pId+'_'+i])dn++});
+  const badges=document.querySelectorAll('.acat .badge');
+  if(badges[pId-1])badges[pId-1].textContent=dn+'/'+P[pId-1].h.length;
+}
+
+/* --- Quiz --- */
+let qi=0,qs=0,qa=false;
+function rQ(){qi=0;qs=0;shQ()}
+function shQ(){
+  const el=document.getElementById('eQ');
+  if(qi>=QZ.length){
+    aQH(qs);
+    const pct=Math.round(qs/QZ.length*100);
+    el.innerHTML=`<div class="cd-box" style="text-align:center;padding:28px">
+      <div style="font-size:2.2rem;color:var(--gd);font-weight:800;font-family:var(--f1)">${qs}/${QZ.length}</div>
+      <div style="font-size:.88rem;color:var(--tx2);margin:6px 0">${pct}% chính xác</div>
+      <p style="margin:10px 0;color:var(--tx2);font-size:.9rem">${pct>=80?'Xuất sắc! Bạn hiểu rõ Triết học Khắc Kỷ.':pct>=50?'Khá tốt! Hãy ôn lại phần Thông điệp cốt lõi.':'Hãy đọc lại Thông điệp và thử lại nhé!'}</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px"><button class="btn bp" onclick="rQ()">Làm lại</button><button class="btn bo" onclick="go('dash')">Xem tiến độ</button></div>
+    </div>`;return;
+  }
+  const q=QZ[qi];qa=false;
+  el.innerHTML=`<div class="qcn">Câu ${qi+1} / ${QZ.length}</div>
+  <div class="cd-box">
+    <p style="font-weight:700;margin-bottom:12px;font-size:.95rem;line-height:1.6">${q.q}</p>
+    ${q.o.map((o,i)=>`<button class="qo" onclick="aQz(${i})" id="qo${i}">${o}</button>`).join('')}
+    <div class="qex" id="qex" style="display:none"></div>
+    <div style="text-align:right;margin-top:10px"><button class="btn bp bs" id="qnx" style="display:none" onclick="qi++;shQ()">Câu tiếp →</button></div>
+  </div>`;
+}
+function aQz(i){
+  if(qa)return;qa=true;const q=QZ[qi];
+  document.getElementById('qo'+q.c).classList.add('ok');
+  if(i===q.c)qs++;else document.getElementById('qo'+i).classList.add('no');
+  document.getElementById('qex').style.display='block';
+  document.getElementById('qex').textContent=q.e;
+  document.getElementById('qnx').style.display='inline-block';
+}
+
+/* --- Flashcards --- */
+let fi=0;
+function rFC(){fi=0;shFC()}
+function shFC(){
+  document.getElementById('fcC').classList.remove('fl');
+  document.getElementById('fcQ').textContent=FC[fi].q;
+  document.getElementById('fcA').textContent=FC[fi].a;
+  document.getElementById('fcCn').textContent=(fi+1)+' / '+FC.length;
+}
+function fcFlip(){document.getElementById('fcC').classList.toggle('fl')}
+function fcN(){fi=(fi+1)%FC.length;shFC()}
+function fcP(){fi=(fi-1+FC.length)%FC.length;shFC()}
+
+/* --- Sai lầm --- */
+function rE(){
+  document.getElementById('eE').innerHTML=MK.map((m,i)=>`
+  <div class="cd-box">
+    <p style="line-height:1.7"><span style="font-size:1.1rem">❌</span> <strong>Sai lầm ${i+1}:</strong> ${m.w}</p>
+    <div class="cor">✅ <strong>Sự thật:</strong> ${m.r}</div>
+  </div>`).join('');
+}
+
+/* --- Nhật ký --- */
+function jSv(){
+  const t=document.getElementById('jI').value.trim();if(!t)return;
+  const j=gJ();j.unshift({id:Date.now(),d:new Date().toLocaleString('vi-VN'),t:t});
+  sJ(j);document.getElementById('jI').value='';rJ();
+}
+function jDl(id){sJ(gJ().filter(e=>e.id!==id));rJ()}
+function rJ(){
+  const j=gJ();
+  document.getElementById('eJ').innerHTML=j.length?j.map(e=>`
+  <div class="cd-box" style="padding:14px 16px">
+    <div style="display:flex;justify-content:space-between;align-items:center"><div class="jd">${e.d}</div><button class="jx" onclick="jDl(${e.id})">Xóa</button></div>
+    <div class="jt">${esc(e.t)}</div>
+  </div>`).join(''):'<p style="color:var(--tx3);text-align:center;padding:28px;font-size:.88rem">Chưa có bài viết nào. Hãy bắt đầu ghi lại suy ngẫm!</p>';
+}
+
+/* --- Dashboard --- */
+function rD(){
+  const a=gA();let tA=0,dA=0;
+  P.forEach(p=>{tA+=p.h.length;p.h.forEach((_,i)=>{if(a['a'+p.id+'_'+i])dA++})});
+  const j=gJ(),qh=gQH();
+  const pct=tA?Math.round(dA/tA*100):0;
+  const last=qh.length?qh[qh.length-1].s+'/'+qh[qh.length-1].t:'—';
+  const best=qh.length?Math.max(...qh.map(x=>x.s))+'/'+QZ.length:'—';
+
+  document.getElementById('eSt').innerHTML=`
+    <div class="sc"><div class="sn">${pct}%</div><div class="sl">Hành động hoàn thành</div></div>
+    <div class="sc"><div class="sn">${dA}/${tA}</div><div class="sl">Tổng hành động</div></div>
+    <div class="sc"><div class="sn">${qh.length}</div><div class="sl">Lần kiểm tra</div></div>
+    <div class="sc"><div class="sn">${last}</div><div class="sl">Điểm gần nhất</div></div>
+    <div class="sc"><div class="sn">${best}</div><div class="sl">Điểm cao nhất</div></div>
+    <div class="sc"><div class="sn">${j.length}</div><div class="sl">Bài nhật ký</div></div>`;
+
+  // Tiến độ theo nguyên tắc — liên kết rõ ràng
+  document.getElementById('ePp').innerHTML=P.map(p=>{
+    let dn=0;p.h.forEach((_,i)=>{if(a['a'+p.id+'_'+i])dn++});
+    const pct2=p.h.length?Math.round(dn/p.h.length*100):0;
+    return `<div class="dp-item">
+      <div class="dp-row">
+        <div class="dp-name"><span class="pn" style="width:24px;height:24px;font-size:.7rem">${p.id}</span> ${p.ic} ${p.t}</div>
+        <div class="dp-cnt">${dn}/${p.h.length}</div>
+      </div>
+      <div class="pbar"><div class="pfill" style="width:${pct2}%"></div></div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('eQh').innerHTML=qh.length?qh.slice(-8).reverse().map(h=>`
+  <div class="qh-row"><span>${h.d}</span><span style="color:var(--gd);font-weight:700">${h.s}/${h.t} (${Math.round(h.s/h.t*100)}%)</span></div>`).join(''):'<p style="color:var(--tx3);font-size:.86rem">Chưa có lịch sử. Hãy làm bài kiểm tra!</p>';
+}
+
+/* ===========================================================
+   ĐIỀU HƯỚNG — NAVIGATION
+   =========================================================== */
+function go(p){
+  document.querySelectorAll('.pg').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(x=>x.classList.remove('on'));
+  document.getElementById('p-'+p).classList.add('on');
+  const b=document.querySelector('.nb[data-p="'+p+'"]');if(b)b.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(p==='act')rA();if(p==='quiz')rQ();if(p==='fc')rFC();if(p==='jnl')rJ();if(p==='dash')rD();if(p==='ref')rR();
+}
+document.querySelectorAll('.nb').forEach(b=>b.addEventListener('click',()=>go(b.dataset.p)));
+
+/* ===========================================================
+   THEME — CHẾ ĐỘ TỐI/SÁNG
+   =========================================================== */
+function toggleTheme(){
+  const d=document.documentElement;const dk=d.getAttribute('data-theme')==='dark';
+  d.setAttribute('data-theme',dk?'light':'dark');
+  document.getElementById('tB').textContent=dk?'🌙':'☀️';S('th',dk?'light':'dark');
+}
+function ldTh(){
+  const t=G().th||'dark';document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('tB').textContent=t==='dark'?'☀️':'🌙';
+}
+
+/* ===========================================================
+   TIỆN ÍCH
+   =========================================================== */
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+/* ===========================================================
+   KHỞI TẠO
+   =========================================================== */
+ldTh();rM();rE();rFC();rJ();
+</script>
+</body>
+</html>
